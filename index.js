@@ -35,6 +35,7 @@ app.post('/save-score', (req, res) => {
   });
 });
 
+// Retrieve score by hash and include hash in the response
 app.get('/score', (req, res) => {
   const hash = req.query.hash;
   const query = 'SELECT score FROM scores WHERE hash = ?';
@@ -44,13 +45,13 @@ app.get('/score', (req, res) => {
       return res.status(500).send('Error retrieving data');
     }
     if (results.length > 0) {
-      res.status(200).json(results[0]);
+      // Send both score and hash back in the response
+      res.status(200).json({ hash, score: results[0].score });
     } else {
       res.status(404).send('No data found');
     }
   });
 });
-
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
