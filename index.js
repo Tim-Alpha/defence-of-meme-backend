@@ -35,6 +35,23 @@ app.post('/save-score', (req, res) => {
   });
 });
 
+app.get('/score', (req, res) => {
+  const hash = req.query.hash;
+  const query = 'SELECT score FROM scores WHERE hash = ?';
+
+  db.query(query, [hash], (err, results) => {
+    if (err) {
+      return res.status(500).send('Error retrieving data');
+    }
+    if (results.length > 0) {
+      res.status(200).json(results[0]);
+    } else {
+      res.status(404).send('No data found');
+    }
+  });
+});
+
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
